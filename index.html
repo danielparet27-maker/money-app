@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CaptionCraft — Free Caption Generator</title>
+  <style>
+    body {
+      font-family: Arial;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      text-align: center;
+    }
+    #output {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      min-height: 80px;
+    }
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    input, select {
+      width: 90%;
+      padding: 10px;
+      margin-top: 15px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>CaptionCraft</h1>
+<p>Generate social media captions instantly.</p>
+
+<input id="topic" placeholder="Enter a topic (fitness, travel, motivation...)">
+
+<select id="style">
+  <option value="funny">Funny</option>
+  <option value="inspirational">Inspirational</option>
+  <option value="professional">Professional</option>
+  <option value="trendy">Trendy</option>
+</select>
+
+<br><br>
+<button onclick="makeCaption()">Generate Caption</button>
+
+<div id="output"></div>
+
+<script>
+function makeCaption() {
+  let topic = document.getElementById("topic").value;
+  let style = document.getElementById("style").value;
+
+  let captions = {
+    funny: [
+      "Trying to be serious about " + topic + ", but honestly… I can’t 😂",
+      topic + "? More like my daily chaos generator 🤣",
+      "If " + topic + " was easy, everyone would do it… but here we are 😅"
+    ],
+    inspirational: [
+      "Every day is a new chance to grow in " + topic + " 🌱✨",
+      "Stay focused, stay driven — your " + topic + " journey is just beginning 💪",
+      "Believe in yourself. Your " + topic + " goals are closer than you think ✨"
+    ],
+    professional: [
+      "Delivering consistent results in " + topic + " 📊",
+      "Focused, prepared, and ready to excel in " + topic + ".",
+      topic + " excellence isn’t a goal — it’s a standard."
+    ],
+    trendy: [
+      "POV: You’re leveling up your " + topic + " game 🔥",
+      topic + " era unlocked ✨",
+      "Aesthetic vibes + " + topic + " = perfection 💫"
+    ]
+  };
+
+  let options = captions[style];
+  let pick = Math.floor(Math.random() * options.length);
+
+  document.getElementById("output").innerText = options[pick];
+}
+</script>
+
+</body>
+</html>
