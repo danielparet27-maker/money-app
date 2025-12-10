@@ -1,88 +1,313 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
   <title>CaptionCraft — Free Caption Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Generate ready-to-post social media captions in seconds with CaptionCraft." />
+
   <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0f172a;
+      --card-bg: #ffffff;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --accent-dark: #1d4ed8;
+      --text-main: #0f172a;
+      --text-subtle: #6b7280;
+      --border-subtle: #e5e7eb;
+      --radius-lg: 18px;
+      --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.25);
+    }
+
     body {
-      font-family: Arial;
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #1d4ed8 0, #0f172a 45%, #020617 100%);
+      color: var(--text-main);
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 28px 24px 24px;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      margin-top: 6px;
+      font-size: 14px;
+      color: var(--text-subtle);
+    }
+
+    form {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .input-group {
+      text-align: left;
+    }
+
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+      background-color: #f9fafb;
+    }
+
+    input[type="text"]:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.2);
+      background-color: #ffffff;
+    }
+
+    select {
+      appearance: none;
+      background-image: linear-gradient(45deg, transparent 50%, #9ca3af 50%),
+                        linear-gradient(135deg, #9ca3af 50%, transparent 50%);
+      background-position: calc(100% - 14px) 13px, calc(100% - 9px) 13px;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+    }
+
+    button {
+      margin-top: 4px;
+      width: 100%;
+      border: none;
+      border-radius: 999px;
+      padding: 11px 16px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #f9fafb;
+      background: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s ease, transform 0.05s ease, box-shadow 0.15s ease;
+      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.35);
+    }
+
+    button:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+    }
+
+    button:focus-visible {
+      outline: 2px solid #1e3a8a;
+      outline-offset: 2px;
+    }
+
+    .button-icon {
+      font-size: 17px;
+    }
+
+    #output {
+      margin-top: 18px;
+      padding: 14px 14px 16px;
+      border-radius: 14px;
+      border: 1px dashed var(--border-subtle);
+      background: #f9fafb;
+      font-size: 14px;
+      text-align: left;
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      color: var(--text-main);
+    }
+
+    #output.placeholder {
+      color: var(--text-subtle);
+      font-style: italic;
+    }
+
+    .footer-note {
+      margin-top: 12px;
+      font-size: 11px;
+      color: var(--text-subtle);
       text-align: center;
     }
-    #output {
-      margin-top: 20px;
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      min-height: 80px;
-    }
-    button {
-      font-size: 18px;
-      padding: 10px 20px;
-      cursor: pointer;
-    }
-    input, select {
-      width: 90%;
-      padding: 10px;
-      margin-top: 15px;
-      font-size: 16px;
+
+    @media (max-width: 480px) {
+      .app {
+        padding: 22px 18px 20px;
+      }
+      h1 {
+        font-size: 22px;
+      }
     }
   </style>
 </head>
 <body>
+  <main class="app" aria-labelledby="app-title">
+    <div class="badge-row">
+      <span class="badge">Free tool</span>
+      <span class="badge">No login</span>
+    </div>
 
-<h1>CaptionCraft</h1>
-<p>Generate social media captions instantly.</p>
+    <header>
+      <h1 id="app-title">CaptionCraft</h1>
+      <p class="subtitle">Generate ready-to-post captions for socials in seconds.</p>
+    </header>
 
-<input id="topic" placeholder="Enter a topic (fitness, travel, motivation...)">
+    <form onsubmit="event.preventDefault(); makeCaption();">
+      <div class="input-group">
+        <label for="topic">What are you posting about?</label>
+        <input
+          id="topic"
+          type="text"
+          placeholder="e.g. leg day, solo travel, Monday motivation"
+          autocomplete="off"
+        />
+      </div>
 
-<select id="style">
-  <option value="funny">Funny</option>
-  <option value="inspirational">Inspirational</option>
-  <option value="professional">Professional</option>
-  <option value="trendy">Trendy</option>
-</select>
+      <div class="input-group">
+        <label for="style">Caption style</label>
+        <select id="style">
+          <option value="funny">Funny</option>
+          <option value="inspirational">Inspirational</option>
+          <option value="professional">Professional</option>
+          <option value="trendy">Trendy</option>
+        </select>
+      </div>
 
-<br><br>
-<button onclick="makeCaption()">Generate Caption</button>
+      <button type="submit">
+        <span class="button-icon">✨</span>
+        Generate caption
+      </button>
+    </form>
 
-<div id="output"></div>
+    <div
+      id="output"
+      class="placeholder"
+      role="status"
+      aria-live="polite"
+    >
+      Your caption will appear here.
+    </div>
 
-<script>
-function makeCaption() {
-  let topic = document.getElementById("topic").value;
-  let style = document.getElementById("style").value;
+    <p class="footer-note">Tip: Tap the caption to copy it into your post.</p>
+  </main>
 
-  let captions = {
-    funny: [
-      "Trying to be serious about " + topic + ", but honestly… I can’t 😂",
-      topic + "? More like my daily chaos generator 🤣",
-      "If " + topic + " was easy, everyone would do it… but here we are 😅"
-    ],
-    inspirational: [
-      "Every day is a new chance to grow in " + topic + " 🌱✨",
-      "Stay focused, stay driven — your " + topic + " journey is just beginning 💪",
-      "Believe in yourself. Your " + topic + " goals are closer than you think ✨"
-    ],
-    professional: [
-      "Delivering consistent results in " + topic + " 📊",
-      "Focused, prepared, and ready to excel in " + topic + ".",
-      topic + " excellence isn’t a goal — it’s a standard."
-    ],
-    trendy: [
-      "POV: You’re leveling up your " + topic + " game 🔥",
-      topic + " era unlocked ✨",
-      "Aesthetic vibes + " + topic + " = perfection 💫"
-    ]
-  };
+  <script>
+    function makeCaption() {
+      const topicInput = document.getElementById("topic");
+      const topic = topicInput.value.trim();
+      const style = document.getElementById("style").value;
+      const output = document.getElementById("output");
 
-  let options = captions[style];
-  let pick = Math.floor(Math.random() * options.length);
+      if (!topic) {
+        output.textContent = "Add a topic first so I can craft something specific for you.";
+        output.classList.remove("placeholder");
+        topicInput.focus();
+        return;
+      }
 
-  document.getElementById("output").innerText = options[pick];
-}
-</script>
+      const captions = {
+        funny: [
+          "Trying to be serious about " + topic + ", but honestly… I can’t 😂",
+          topic + "? More like my daily chaos generator 🤣",
+          "If " + topic + " was easy, everyone would do it… but here we are 😅"
+        ],
+        inspirational: [
+          "Every day is a new chance to grow in " + topic + " 🌱✨",
+          "Stay focused, stay driven — your " + topic + " journey is just beginning 💪",
+          "Believe in yourself. Your " + topic + " goals are closer than you think ✨"
+        ],
+        professional: [
+          "Delivering consistent results in " + topic + " 📊",
+          "Focused, prepared, and ready to excel in " + topic + ".",
+          topic + " excellence isn’t a goal — it’s a standard."
+        ],
+        trendy: [
+          "POV: You’re leveling up your " + topic + " game 🔥",
+          topic + " era unlocked ✨",
+          "Aesthetic vibes + " + topic + " = perfection 💫"
+        ]
+      };
 
+      const options = captions[style] || captions.trendy;
+      const pick = Math.floor(Math.random() * options.length);
+
+      output.textContent = options[pick];
+      output.classList.remove("placeholder");
+    }
+
+    // Optional: click to copy
+    document.addEventListener("DOMContentLoaded", () => {
+      const output = document.getElementById("output");
+      output.addEventListener("click", async () => {
+        const text = output.textContent.trim();
+        if (!text || output.classList.contains("placeholder")) return;
+        try {
+          await navigator.clipboard.writeText(text);
+          const prev = output.textContent;
+          output.textContent = "Copied to clipboard ✅";
+          setTimeout(() => { output.textContent = prev; }, 1200);
+        } catch {
+          // ignore if clipboard not available
+        }
+      });
+    });
+  </script>
 </body>
 </html>
