@@ -6,6 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Generate ready-to-post social media captions in seconds with CaptionCraft." />
 
+  <!-- Google AdSense loader: replace ca-pub-XXXXXXXXXXXXXXXX with your own ID -->
+  <script async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -517,6 +522,13 @@
       text-align: center;
     }
 
+    /* AdSense block wrapper */
+    .ad-wrapper {
+      margin-top: 12px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(148,163,184,0.35);
+    }
+
     .right-panel {
       display: flex;
       flex-direction: column;
@@ -809,6 +821,19 @@
           <p class="footer-note">
             Pro tip: Regenerate a few times to get variations, then mix your favorite lines.
           </p>
+
+          <!-- AdSense block: replace data-ad-client and data-ad-slot with your values -->
+          <div class="ad-wrapper">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                 data-ad-slot="1234567890"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+              (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
         </section>
       </div>
     </section>
@@ -865,6 +890,44 @@
           CaptionCraft is a free tool. Use it as your “caption assistant” while you focus on the content that makes money.
         </div>
       </article>
+
+      <!-- Affiliate recommendations block -->
+      <article class="right-panel-card">
+        <div class="tiny-label">Recommended tools</div>
+        <h2>Creator essentials</h2>
+        <ul class="list-inline">
+          <li>
+            <span class="list-bullet"></span>
+            <a href="YOUR_CANVA_AFFILIATE_LINK_HERE"
+               target="_blank"
+               rel="noopener noreferrer"
+               style="color:var(--accent); text-decoration:none;">
+              Canva Pro – design posts fast
+            </a>
+          </li>
+          <li>
+            <span class="list-bullet"></span>
+            <a href="YOUR_MUSIC_AFFILIATE_LINK_HERE"
+               target="_blank"
+               rel="noopener noreferrer"
+               style="color:var(--accent); text-decoration:none;">
+              Royalty-free music for Reels & TikToks
+            </a>
+          </li>
+          <li>
+            <span class="list-bullet"></span>
+            <a href="YOUR_AMAZON_AFFILIATE_LINK_HERE"
+               target="_blank"
+               rel="noopener noreferrer"
+               style="color:var(--accent); text-decoration:none;">
+              Phone tripod & ring light (Amazon)
+            </a>
+          </li>
+        </ul>
+        <div class="tiny-footer">
+          These are affiliate links, which means I may earn a small commission if you choose to sign up or buy—at no extra cost to you.
+        </div>
+      </article>
     </aside>
   </div>
 
@@ -878,21 +941,24 @@
       const button = document.getElementById("generateBtn");
 
       if (!topic) {
-        output.textContent = "Add a topic first so I can craft something specific for you.";
+        output.textContent =
+          "Add a topic first so I can craft something specific for you.";
         output.classList.remove("placeholder");
-        return topicInput.focus();
+        topicInput.focus();
+        return;
       }
 
       button.classList.add("loading");
       button.disabled = true;
-      output.classList.remove("copied");
+      output.classList.remove("placeholder", "copied");
+      output.textContent = "Crafting your caption…";
 
-      const platTag = {
-        instagram: "#instagram",
-        tiktok: "#tiktok",
-        linkedin: "#linkedin",
-        twitter: "#X"
-      }[platform] || "";
+      const platHashtags = {
+        instagram: ["#reels", "#instagood", "#contentcreator"],
+        tiktok: ["#fyp", "#tiktok", "#creators"],
+        linkedin: ["#personalbranding", "#careerdevelopment", "#content"],
+        twitter: ["#buildinpublic", "#creators", "#content"]
+      };
 
       const captions = {
         funny: [
@@ -921,34 +987,24 @@
           "\"" + topic + "\" but make it aesthetic. ✨"
         ],
         story: [
-          "A year ago \"" + topic + "\" was just an idea in my notes app. Today, it’s part of my daily routine—and I’m not going back. Here’s why.",
           "I used to overthink every post about \"" + topic + "\". Then I realized people connect more with the messy, real moments than the perfect ones.",
-          "This started as a small experiment with \"" + topic + "\". Somewhere along the way, it turned into something I actually love showing up for."
+          "This started as a small experiment with \"" + topic + "\". Somewhere along the way, it turned into something I actually love showing up for.",
+          "A year from now, you’ll be glad you started sharing \"" + topic + "\" today—not when it feels perfect."
         ]
       };
 
-      const platHashtags = {
-        instagram: ["#reels", "#instagood", "#contentcreator"],
-        tiktok: ["#fyp", "#tiktok", "#creators"],
-        linkedin: ["#personalbranding", "#careerdevelopment", "#content"],
-        twitter: ["#buildinpublic", "#creators", "#content"]
-      };
+      const options = captions[style] || captions.trendy;
+      const pick = Math.floor(Math.random() * options.length);
+      let text = options[pick];
 
-      const hashTail = platform
-        ? " " + platHashtags[platform].join(" ")
-        : " #content #creator";
+      if (platform && platHashtags[platform]) {
+        text += " " + platHashtags[platform].join(" ");
+      } else {
+        text += " #content #creator";
+      }
 
       setTimeout(() => {
-        const options = captions[style] || captions.trendy;
-        const pick = Math.floor(Math.random() * options.length);
-        let text = options[pick];
-
-        if (platform) {
-          text += " " + hashTail;
-        }
-
         output.textContent = text;
-        output.classList.remove("placeholder");
         button.classList.remove("loading");
         button.disabled = false;
       }, 450);
